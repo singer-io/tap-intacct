@@ -4,9 +4,6 @@ from tap_intacct import s3
 def discover_streams(config):
     streams = []
 
-    # List files under bucket/<maybe-path>/company_name
-    # Group by text-before-first-.
-    # for each group...
     exported_tables = s3.get_exported_tables(config['bucket'], config['company_name'], path=config.get('path'))
 
     for exported_table in exported_tables:
@@ -18,9 +15,9 @@ def discover_streams(config):
 def load_metadata(schema):
     mdata = metadata.new()
 
-    #mdata = metadata.write(mdata, (), 'table-key-properties', table_spec['key_properties'])
-
     for field_name in schema.get('properties', {}).keys():
         mdata = metadata.write(mdata, ('properties', field_name), 'inclusion', 'automatic')
+        if field_name == "RECORDNO":
+            mdata = metadata.write(mdata, (), 'table-key-properties', "RECORDNO")
 
     return metadata.to_list(mdata)

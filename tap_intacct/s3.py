@@ -97,8 +97,6 @@ def get_input_files_for_table(config, table_name, modified_since=None):
 
     to_return = []
 
-    # GLENTRY*
-
     path = config.get('path')
     company_name = config['company_name']
     prefix = str.join('/', [path, company_name]) if path else company_name

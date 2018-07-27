@@ -1,6 +1,11 @@
+import re
 import singer
+import dateutil
 
 LOGGER = singer.get_logger()
+
+date_regex = re.compile(r"^\d{4}-[01]?\d-[0-3]?\d$")
+datetime_regex = re.compile(r"^\d{4}-[01]\d-[0-3]\dT\d{2}\:\d{2}\:\d{2}Z$")
 
 def infer(datum):
     """
@@ -22,6 +27,9 @@ def infer(datum):
     except (ValueError, TypeError):
         pass
 
+    if date_regex.search(datum) or datetime_regex.search(datum):
+        return 'date-time'
+
     return 'string'
 
 
@@ -30,7 +38,6 @@ def count_sample(sample, counts):
         if key not in counts:
             counts[key] = {}
 
-        # TODO: Figure out date times?
         datatype = infer(value)
 
         if datatype is not None:
@@ -85,8 +92,11 @@ def generate_schema(samples):
                 ]
             }
         else:
+            types = ['null', datatype]
+            if datatype != 'string':
+                types.append('string')
             counts[key] = {
-                'type': ['null', datatype],
+                'type': types,
             }
 
     return counts
