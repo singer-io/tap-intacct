@@ -4,6 +4,7 @@ import singer
 
 from singer import metadata
 from tap_intacct.discover import discover_streams
+from tap_intacct.sync import sync_stream
 
 LOGGER = singer.get_logger()
 
@@ -32,11 +33,11 @@ def do_sync(config, catalog, state):
             continue
 
         singer.write_state(state)
-        key_properties = metadata.get(mdata, (), 'table-key-properties')
+        key_properties = metadata.get(mdata, (), 'table-key-properties') or []
         singer.write_schema(stream_name, stream['schema'], key_properties)
 
         LOGGER.info("%s: Starting sync", stream_name)
-        #counter_value = sync_stream(config, state, table_spec, stream)
+        counter_value = sync_stream(config, state, stream)
         LOGGER.info("%s: Completed sync (%s rows)", stream_name, counter_value)
 
     LOGGER.info('Done syncing.')
