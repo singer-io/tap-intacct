@@ -7,8 +7,8 @@ from tap_intacct import conversion
 
 LOGGER = singer.get_logger()
 
-def get_exported_tables(bucket, company_name, path=None):
-    prefix = str.join('/', [path, company_name]) if path else company_name
+def get_exported_tables(bucket, company_id, path=None):
+    prefix = str.join('/', [path, company_id]) if path else company_id
     s3_objects = list_files_in_bucket(bucket, prefix)
     exported_tables = {o['Key'].split('/')[-1].split('.')[0] for o in s3_objects}
     return exported_tables
@@ -98,8 +98,8 @@ def get_input_files_for_table(config, table_name, modified_since=None):
     to_return = []
 
     path = config.get('path')
-    company_name = config['company_name']
-    prefix = str.join('/', [path, company_name]) if path else company_name
+    company_id = config['company_id']
+    prefix = str.join('/', [path, company_id]) if path else company_id
     s3_objects = list_files_in_bucket(bucket, prefix)
 
     pattern = "^" + prefix + '/' + table_name + "\..*"

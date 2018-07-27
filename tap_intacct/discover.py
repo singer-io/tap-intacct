@@ -4,7 +4,7 @@ from tap_intacct import s3
 def discover_streams(config):
     streams = []
 
-    exported_tables = s3.get_exported_tables(config['bucket'], config['company_name'], path=config.get('path'))
+    exported_tables = s3.get_exported_tables(config['bucket'], config['company_id'], path=config.get('path'))
 
     for exported_table in exported_tables:
         schema = s3.get_sampled_schema_for_table(config, exported_table)

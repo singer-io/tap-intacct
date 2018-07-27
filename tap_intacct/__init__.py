@@ -8,7 +8,7 @@ from tap_intacct.sync import sync_stream
 
 LOGGER = singer.get_logger()
 
-REQUIRED_CONFIG_KEYS = ["start_date", "bucket", "company_name"]
+REQUIRED_CONFIG_KEYS = ["start_date", "bucket", "company_id"]
 
 def do_discover(config):
     LOGGER.info("Starting discover")
