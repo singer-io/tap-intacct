@@ -45,11 +45,11 @@ def sync_table_file(config, s3_path, stream):
 
     for row in iterator:
         custom_columns = {
-            '_s3_source_bucket': bucket,
-            '_s3_source_file': s3_path,
+            '_sdc_source_bucket': bucket,
+            '_sdc_source_file': s3_path,
 
             # index zero, +1 for header row
-            '_s3_source_lineno': records_synced + 2
+            '_sdc_source_lineno': records_synced + 2
         }
         rec = {**row, **custom_columns}
 

@@ -64,10 +64,10 @@ def get_sampled_schema_for_table(config, table_name):
     samples = sample_files(config, table_name, s3_files)
 
     metadata_schema = {
-        '_s3_source_bucket': {'type': 'string'},
-        '_s3_source_file': {'type': 'string'},
-        '_s3_source_lineno': {'type': 'integer'},
-        '_s3_extra': {'type': 'array', 'items': {'type': 'string'}},
+        '_sdc_source_bucket': {'type': 'string'},
+        '_sdc_source_file': {'type': 'string'},
+        '_sdc_source_lineno': {'type': 'integer'},
+        '_sdc_extra': {'type': 'array', 'items': {'type': 'string'}},
     }
 
     data_schema = conversion.generate_schema(samples)
