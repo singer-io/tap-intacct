@@ -157,7 +157,7 @@ def sample_file(config, table_name, s3_path, sample_rate, max_records):
 
 # pylint: disable=too-many-arguments
 def sample_files(config, table_name, s3_files,
-                 sample_rate=1, max_records=1000, max_files=5):
+                 sample_rate=5, max_records=1000, max_files=5):
     to_return = []
 
     files_so_far = 0
