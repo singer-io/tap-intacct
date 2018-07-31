@@ -10,7 +10,11 @@ LOGGER = singer.get_logger()
 def get_exported_tables(bucket, company_id, path=None):
     prefix = str.join('/', [path, company_id]) if path else company_id
     s3_objects = list_files_in_bucket(bucket, prefix)
-    exported_tables = {o['Key'].split('/')[-1].split('.')[0] for o in s3_objects}
+
+    s3_files = [o['Key'].split('/')[-1] for o in s3_objects]
+    csv_matcher = re.compile('.*\.csv')
+    exported_tables = {o.split('.')[0] for o in s3_files if csv_matcher.search(o)}
+
     return exported_tables
 
 def list_files_in_bucket(bucket, search_prefix=None):
@@ -102,7 +106,7 @@ def get_input_files_for_table(config, table_name, modified_since=None):
     prefix = str.join('/', [path, company_id]) if path else company_id
     s3_objects = list_files_in_bucket(bucket, prefix)
 
-    pattern = "^" + prefix + '/' + table_name + "\..*"
+    pattern = "^" + prefix + '/' + table_name + "\..*\.csv"
     matcher = re.compile(pattern)
 
     LOGGER.info(
