@@ -7,6 +7,10 @@ from tap_intacct import conversion
 
 LOGGER = singer.get_logger()
 
+SDC_SOURCE_BUCKET_COLUMN = "_sdc_source_bucket"
+SDC_SOURCE_FILE_COLUMN = "_sdc_source_file"
+SDC_SOURCE_LINENO_COLUMN = "_sdc_source_lineno"
+
 def get_exported_tables(bucket, company_id, path=None):
     prefix = str.join('/', [path, company_id]) if path else company_id
     s3_objects = list_files_in_bucket(bucket, prefix)
@@ -68,10 +72,10 @@ def get_sampled_schema_for_table(config, table_name):
     samples = sample_files(config, table_name, s3_files)
 
     metadata_schema = {
-        '_sdc_source_bucket': {'type': 'string'},
-        '_sdc_source_file': {'type': 'string'},
-        '_sdc_source_lineno': {'type': 'integer'},
-        '_sdc_extra': {'type': 'array', 'items': {'type': 'string'}},
+        SDC_SOURCE_BUCKET_COLUMN: {'type': 'string'},
+        SDC_SOURCE_FILE_COLUMN: {'type': 'string'},
+        SDC_SOURCE_LINENO_COLUMN: {'type': 'integer'},
+        csv.SDC_EXTRA_COLUMN: {'type': 'array', 'items': {'type': 'string'}},
     }
 
     data_schema = conversion.generate_schema(samples)
@@ -147,6 +151,8 @@ def sample_file(config, table_name, s3_path, sample_rate, max_records):
 
     for row in iterator:
         if (current_row % sample_rate) == 0:
+            if row.get(csv.SDC_EXTRA_COLUMN):
+                row.pop(csv.SDC_EXTRA_COLUMN)
             samples.append(row)
 
         current_row += 1

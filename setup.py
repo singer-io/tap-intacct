@@ -10,7 +10,7 @@ setup(name="tap-intacct",
       classifiers=['Programming Language :: Python :: 3 :: Only'],
       url="http://singer.io",
       install_requires=[
-          'singer-encodings==0.0.1',
+          'singer-encodings==0.0.2',
           'singer-python==5.1.5',
           'boto3==1.4.4'
       ],
