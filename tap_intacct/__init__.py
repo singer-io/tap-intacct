@@ -8,7 +8,15 @@ from tap_intacct.sync import sync_stream
 
 LOGGER = singer.get_logger()
 
-REQUIRED_CONFIG_KEYS = ["start_date", "bucket", "company_id"]
+REQUIRED_CONFIG_KEYS = ["start_date", "bucket", "company_id", "account_id", "external_id", "role_name"]
+
+def setup_aws_client(config):
+    client = boto3.client('sts')
+    role_arn = "arn:aws:iam::{}:role/{}".format(config['account_id'], config['role_name'])
+
+    role = client.assume_role(RoleArn=role_arn, ExternalId=config['external_id'], RoleSessionName='TapIntacct')
+    boto3.setup_default_session(aws_access_key_id=role['Credentials']['AccessKeyId'], aws_secret_access_key=role['Credentials']['SecretAccessKey'], aws_session_token=role['Credentials']['SessionToken'])
+
 
 def do_discover(config):
     LOGGER.info("Starting discover")
@@ -50,6 +58,8 @@ def do_sync(config, catalog, state):
 def main():
     args = singer.utils.parse_args(REQUIRED_CONFIG_KEYS)
     config = args.config
+
+    setup_aws_client(config)
 
     if args.discover:
         do_discover(args.config)
