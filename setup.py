@@ -12,7 +12,8 @@ setup(name="tap-intacct",
       install_requires=[
           'singer-encodings==0.0.2',
           'singer-python==5.1.5',
-          'boto3==1.4.4'
+          'boto3==1.9.57',
+          'backoff==1.3.2',
       ],
       entry_points='''
           [console_scripts]
