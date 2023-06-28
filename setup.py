@@ -4,7 +4,7 @@ from setuptools import setup, find_packages
 import subprocess
 
 setup(name="tap-intacct",
-      version='1.0.1',
+      version='1.0.2',
       description="Singer.io tap for extracting data from Intacct",
       author="Stitch",
       classifiers=['Programming Language :: Python :: 3 :: Only'],
