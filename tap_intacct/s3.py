@@ -172,7 +172,7 @@ def get_input_files_for_table(config, table_name, modified_since=None):
     prefix = str.join('/', [path, company_id]) if path else company_id
     s3_objects = list_files_in_bucket(bucket, prefix)
 
-    pattern = "^" + prefix + '/' + table_name + "\..*\.csv"
+    pattern = "^" + prefix + '/' + table_name + "\.*\.csv"
     matcher = re.compile(pattern)
 
     LOGGER.info(
