@@ -1,5 +1,8 @@
 # Changelog
 
+## 1.0.3
+ * Updated the regex pattern in s3.py to fetch filename_*.csv [#11](https://github.com/singer-io/tap-intacct/pull/11)
+
 ## 1.0.2
  * Fixed the regex pattern in s3.py [#9](https://github.com/singer-io/tap-intacct/pull/9)
 
