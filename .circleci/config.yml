@@ -16,7 +16,7 @@ jobs:
       - run:
           name: 'Pylint'
           command: |
-            source /usr/local/share/virtualenvs/tap-intacct
+            source /usr/local/share/virtualenvs/tap-intacct/bin/activate
             uv pip install pylint
             pylint tap_intacct
 workflows:
