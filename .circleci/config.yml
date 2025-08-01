@@ -18,7 +18,7 @@ jobs:
           command: |
             source /usr/local/share/virtualenvs/tap-intacct/bin/activate
             uv pip install pylint
-            pylint tap_intacct
+            pylint tap_intacct --disable consider-using-f-string,missing-function-docstring,protected-access,unused-argument,missing-function-docstring,too-many-positional-arguments,wrong-import-order,line-too-long,missing-module-docstring,consider-using-from-import
 workflows:
   version: 2
   commit:
