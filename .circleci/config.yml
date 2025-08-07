@@ -2,17 +2,22 @@ version: 2
 jobs:
   build:
     docker:
-      - image: 218546966473.dkr.ecr.us-east-1.amazonaws.com/circle-ci:tap-tester-v4
+      - image: 218546966473.dkr.ecr.us-east-1.amazonaws.com/circle-ci:stitch-tap-tester-uv
     steps:
       - checkout
       - run:
           name: 'Setup virtual env'
           command: |
-            python3 -mvenv /usr/local/share/virtualenvs/tap-intacct
+            uv venv --python 3.9 /usr/local/share/virtualenvs/tap-intacct
             source /usr/local/share/virtualenvs/tap-intacct/bin/activate
-            pip install -U 'pip<19.2' 'setuptools<51.0.0'
-            pip install .[dev]
-      - add_ssh_keys
+            uv pip install -U 'pip<19.2' 'setuptools<51.0.0'
+            uv pip install .[dev]
+      - run:
+          name: 'Pylint'
+          command: |
+            source /usr/local/share/virtualenvs/tap-intacct/bin/activate
+            uv pip install pylint
+            pylint tap_intacct --disable consider-using-f-string,missing-function-docstring,protected-access,unused-argument,missing-function-docstring,too-many-positional-arguments,wrong-import-order,line-too-long,missing-module-docstring,consider-using-from-import,broad-exception-raised,bare-except,unused-variable,anomalous-backslash-in-string,missing-class-docstring,too-few-public-methods,too-many-locals,unused-import
 workflows:
   version: 2
   commit:
