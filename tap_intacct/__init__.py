@@ -62,7 +62,7 @@ def main():
             # If both are present, call setup_aws_client_with_proxy
             s3.setup_aws_client_with_proxy(config)
         else:
-            # Otherwise, call setup_aws_client        
+            # Otherwise, call setup_aws_client
             s3.setup_aws_client(config)
 
     if args.discover:
