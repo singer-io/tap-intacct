@@ -1,4 +1,5 @@
 import backoff
+import functools
 import boto3
 import re
 import singer
@@ -22,12 +23,16 @@ SDC_SOURCE_BUCKET_COLUMN = "_sdc_source_bucket"
 SDC_SOURCE_FILE_COLUMN = "_sdc_source_file"
 SDC_SOURCE_LINENO_COLUMN = "_sdc_source_lineno"
 
-def retry_pattern():
-    return backoff.on_exception(backoff.expo,
-                                ClientError,
-                                max_tries=5,
-                                on_backoff=log_backoff_attempt,
-                                factor=10)
+def retry_pattern(fnc):
+    @backoff.on_exception(backoff.expo,
+                          ClientError,
+                          max_tries=5,
+                          on_backoff=log_backoff_attempt,
+                          factor=10)
+    @functools.wraps(fnc)
+    def wrapper(*args, **kwargs):
+        return fnc(*args, **kwargs)
+    return wrapper
 
 
 def log_backoff_attempt(details):
