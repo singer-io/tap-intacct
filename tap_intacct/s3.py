@@ -53,7 +53,7 @@ class AssumeRoleProvider():
 
 
 
-@retry_pattern()
+@retry_pattern
 def setup_aws_client(config):
     role_arn = "arn:aws:iam::{}:role/{}".format(config['account_id'].replace('-', ''),
                                                 config['role_name'])
