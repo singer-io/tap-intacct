@@ -120,15 +120,22 @@ def setup_aws_client_with_proxy(config):
         cache=JSONFileCache(credentials_cache_path)
     )
 
+    # Create RefreshableCredentials for Customer Account
+    refreshable_credentials_cust = RefreshableCredentials.create_from_metadata(
+        metadata=fetcher_cust.fetch_credentials(),
+        refresh_using=fetcher_cust.fetch_credentials,
+        method="sts-assume-role"
+    )
+    session_cust._credentials = refreshable_credentials_cust
+
     # Set up refreshable session for Customer Account
-    refreshable_session_cust = Session()
-    refreshable_session_cust.register_component(
+    session_cust.register_component(
         'credential_provider',
         CredentialResolver([AssumeRoleProvider(fetcher_cust)])
     )
 
     LOGGER.info("Attempting to assume_role on RoleArn: %s", cust_role_arn)
-    boto3.setup_default_session(botocore_session=refreshable_session_cust)
+    boto3.setup_default_session(botocore_session=session_cust)
 
 def get_exported_tables(bucket, company_id, path=None):
     prefix = str.join('/', [path, company_id]) if path else company_id
