@@ -20,4 +20,7 @@ def load_metadata(schema):
         if field_name == "RECORDNO":
             mdata = metadata.write(mdata, (), 'table-key-properties', "RECORDNO")
 
+    # Since it reads CSV files from S3 individually hence FULL_TABLE replication
+    mdata = metadata.write(mdata, (), 'forced-replication-method', 'FULL_TABLE')
+
     return metadata.to_list(mdata)
