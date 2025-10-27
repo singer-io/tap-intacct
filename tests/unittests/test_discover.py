@@ -8,7 +8,6 @@ sys.path.insert(0, os.path.join(os.path.dirname(__file__), '..', '..'))
 
 # Mock external dependencies before importing
 sys.modules['boto3'] = MagicMock()
-sys.modules['singer'] = MagicMock()
 sys.modules['singer_encodings'] = MagicMock()
 sys.modules['singer_encodings.csv'] = MagicMock()
 sys.modules['backoff'] = MagicMock()
@@ -16,6 +15,46 @@ sys.modules['botocore'] = MagicMock()
 sys.modules['botocore.credentials'] = MagicMock()
 sys.modules['botocore.exceptions'] = MagicMock()
 sys.modules['botocore.session'] = MagicMock()
+
+# Create a proper mock for singer.metadata
+class MockMetadataStore:
+    def __init__(self):
+        self._metadata_store = []
+
+mock_singer = MagicMock()
+mock_metadata = MagicMock()
+
+# Mock the metadata functions to work like the real ones
+def mock_new():
+    return MockMetadataStore()
+
+def mock_write(mdata, breadcrumb, key, value):
+    # Store metadata in a way that can be retrieved
+    mdata._metadata_store.append({
+        'breadcrumb': list(breadcrumb),
+        'metadata': {key: value}
+    })
+    return mdata
+
+def mock_to_list(mdata):
+    if not hasattr(mdata, '_metadata_store'):
+        return []
+    
+    # Group metadata by breadcrumb
+    grouped = {}
+    for item in mdata._metadata_store:
+        breadcrumb_key = tuple(item['breadcrumb'])
+        if breadcrumb_key not in grouped:
+            grouped[breadcrumb_key] = {'breadcrumb': item['breadcrumb'], 'metadata': {}}
+        grouped[breadcrumb_key]['metadata'].update(item['metadata'])
+    
+    return list(grouped.values())
+
+mock_metadata.new = mock_new
+mock_metadata.write = mock_write
+mock_metadata.to_list = mock_to_list
+mock_singer.metadata = mock_metadata
+sys.modules['singer'] = mock_singer
 
 from tap_intacct.discover import load_metadata, discover_streams
 
