@@ -23,7 +23,7 @@ class TestMetadataGeneration(unittest.TestCase):
                     mdata = self.mock_metadata.write(mdata, (), 'table-key-properties', "RECORDNO")
 
             # Add forced-replication-method to the metadata
-            mdata = self.mock_metadata.write(mdata, (), 'forced-replication-method', 'FULL_TABLE')
+            mdata = self.mock_metadata.write(mdata, (), 'forced-replication-method', 'INCREMENTAL')
 
             return self.mock_metadata.to_list(mdata)
         
@@ -45,5 +45,5 @@ class TestMetadataGeneration(unittest.TestCase):
             self.mock_metadata.new(),
             (),  # Empty breadcrumb for table-level metadata
             'forced-replication-method',
-            'FULL_TABLE'
+            'INCREMENTAL'
         )

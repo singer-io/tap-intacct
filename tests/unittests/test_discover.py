@@ -81,7 +81,7 @@ class TestDiscoverMetadata(unittest.TestCase):
         
         # Check that forced-replication-method is set at table level
         table_metadata = metadata_dict.get((), {})
-        self.assertEqual(table_metadata.get('forced-replication-method'), 'FULL_TABLE')
+        self.assertEqual(table_metadata.get('forced-replication-method'), 'INCREMENTAL')
 
     def test_load_metadata_sets_field_inclusion_automatic(self):
         """Test that all fields have inclusion set to automatic."""
@@ -141,4 +141,4 @@ class TestDiscoverMetadata(unittest.TestCase):
                     break
             
             self.assertIsNotNone(table_metadata)
-            self.assertEqual(table_metadata.get('forced-replication-method'), 'FULL_TABLE')
+            self.assertEqual(table_metadata.get('forced-replication-method'), 'INCREMENTAL')
