@@ -9,7 +9,7 @@ from tap_intacct import s3
 
 LOGGER = singer.get_logger()
 
-REQUIRED_CONFIG_KEYS = ["start_date", "bucket", "company_id"]
+REQUIRED_CONFIG_KEYS = ["start_date", "bucket", "company_id", "account_id", "external_id", "role_name"]
 
 def do_discover(config):
     LOGGER.info("Starting discover")
