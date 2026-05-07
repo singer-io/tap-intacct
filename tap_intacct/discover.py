@@ -20,4 +20,6 @@ def load_metadata(schema):
         if field_name == "RECORDNO":
             mdata = metadata.write(mdata, (), 'table-key-properties', "RECORDNO")
 
+    mdata = metadata.write(mdata, (), 'forced-replication-method', 'INCREMENTAL')
+
     return metadata.to_list(mdata)

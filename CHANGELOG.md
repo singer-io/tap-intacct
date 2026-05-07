@@ -1,5 +1,8 @@
 # Changelog
 
+## 1.2.0
+ * Add forced-replication-method to catalog metadata [#15](https://github.com/singer-io/tap-intacct/pull/15)
+
 ## 1.1.0
  * Adds proxy AWS Account support [#13](https://github.com/singer-io/tap-intacct/pull/13)
  * Update libraries 
