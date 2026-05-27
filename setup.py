@@ -4,16 +4,17 @@ from setuptools import setup, find_packages
 import subprocess
 
 setup(name="tap-intacct",
-      version='1.2.0',
+      version='1.2.1',
       description="Singer.io tap for extracting data from Intacct",
       author="Stitch",
       classifiers=['Programming Language :: Python :: 3 :: Only'],
       url="http://singer.io",
       install_requires=[
-          'singer-encodings==0.1.3',
+          'singer-encodings==0.5.0',
           'singer-python==6.1.1',
           'boto3==1.39.17',
-          'backoff==2.2.1',
+          'backoff==2.2.1',,
+        'requests>=2.33.0'
       ],
       entry_points='''
           [console_scripts]
