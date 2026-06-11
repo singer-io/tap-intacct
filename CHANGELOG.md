@@ -1,5 +1,8 @@
 # Changelog
 
+## 1.3.0
+ * Tables the credentials cannot access (HTTP 403 / AccessDenied) are excluded from catalog[#16](https://github.com/singer-io/tap-intacct/pull/16)
+
 ## 1.2.0
  * Add forced-replication-method to catalog metadata [#15](https://github.com/singer-io/tap-intacct/pull/15)
 
