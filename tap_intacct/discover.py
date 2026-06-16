@@ -11,7 +11,7 @@ def discover_streams(config: dict) -> list:
     """
     Discover available tables from the configured S3 bucket, verify read access
     for each table, and return a catalog stream list. Tables the credentials
-    cannot access (HTTP 403 / AccessDenied / 401 / Forbidden) are silently excluded from the
+    cannot access (HTTP 403 / AccessDenied / 401 / Forbidden) are excluded from the
     returned catalog.
     """
     streams = []
@@ -39,7 +39,7 @@ def load_metadata(schema):
 
 
 def _is_access_denied(client_error: ClientError) -> bool:
-    """Return True if the ClientError represents an HTTP 403 / AccessDenied response."""
+    """Return True if the ClientError represents an authorization failure (403/401/AccessDenied/Forbidden)."""
     error_code = client_error.response['Error']['Code']
     return error_code in ('403', 'AccessDenied', 'Forbidden', '401')
 
@@ -68,17 +68,19 @@ def _apply_access_checks(config: dict, exported_tables) -> list:
     Raises an exception if no tables are accessible due to permission errors.
     Returns the list of accessible table names.
     """
-    inaccessible_tables = [
-        table_name
-        for table_name in exported_tables
-        if not _check_table_access(config, table_name)
-    ]
-    accessible_tables = [t for t in exported_tables if t not in inaccessible_tables]
+    accessible_tables = []
+    inaccessible_tables = []
+
+    for table_name in exported_tables:
+        if _check_table_access(config, table_name):
+            accessible_tables.append(table_name)
+        else:
+            inaccessible_tables.append(table_name)
 
     if inaccessible_tables:
         if not accessible_tables:
             raise Exception(
-                "HTTP-error-code: 403, Error: The account credentials doesn't have access to any streams. Please re check the configuration"
+                "HTTP-error-code: 403, Error: The account credentials supplied do not have 'read' access to any of the tables in the configured bucket. Please re-check the configuration."
             )
         LOGGER.warning(
             "The account credentials supplied do not have 'read' access to the following table(s): %s. "
