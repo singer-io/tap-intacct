@@ -7,6 +7,11 @@ from tap_intacct import s3
 LOGGER = singer.get_logger()
 
 
+class IntacctForbiddenError(Exception):
+    "Raised when none of the streams/tables are accessible"
+    pass
+
+
 def discover_streams(config: dict) -> list:
     """
     Discover available tables from the configured S3 bucket, verify read access
@@ -65,7 +70,7 @@ def _check_table_access(config: dict, table_name: str) -> bool:
 def _apply_access_checks(config: dict, exported_tables) -> list:
     """
     Probe each exported table for S3 read access and filter out inaccessible tables.
-    Raises an exception if no tables are accessible due to permission errors.
+    Raises an IntacctForbiddenError if no tables are accessible due to permission errors.
     Returns the list of accessible table names.
     """
     accessible_tables = []
@@ -79,7 +84,7 @@ def _apply_access_checks(config: dict, exported_tables) -> list:
 
     if inaccessible_tables:
         if not accessible_tables:
-            raise Exception(
+            raise IntacctForbiddenError(
                 "HTTP-error-code: 403, Error: The account credentials supplied do not have 'read' access to any of the tables in the configured bucket. Please re-check the configuration."
             )
         LOGGER.warning(
