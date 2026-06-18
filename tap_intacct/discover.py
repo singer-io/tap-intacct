@@ -9,7 +9,6 @@ LOGGER = singer.get_logger()
 
 class IntacctForbiddenError(Exception):
     "Raised when none of the streams/tables are accessible"
-    pass
 
 
 def discover_streams(config: dict) -> list:
