@@ -1,5 +1,9 @@
 # Changelog
 
+## 1.2.1
+  * Upgrade python version to 3.12 [#20](https://github.com/singer-io/tap-intacct/pull/20)
+  * Add mock-integration tests
+
 ## 1.2.0
  * Add forced-replication-method to catalog metadata [#15](https://github.com/singer-io/tap-intacct/pull/15)
 
