@@ -1,5 +1,8 @@
 # Changelog
 
+## 1.3.0
+ * Tables the credentials cannot access (HTTP 403 / AccessDenied / 401 / Forbidden) are excluded from catalog[#18](https://github.com/singer-io/tap-intacct/pull/18)
+
 ## 1.2.1
   * Upgrade python version to 3.12 [#20](https://github.com/singer-io/tap-intacct/pull/20)
   * Add mock-integration tests
