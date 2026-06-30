@@ -1,17 +1,16 @@
 #!/usr/bin/env python
 
-from setuptools import setup, find_packages
-import subprocess
+from setuptools import find_packages, setup
 
 setup(name="tap-intacct",
-      version='1.2.0',
+      version='1.2.1',
       description="Singer.io tap for extracting data from Intacct",
       author="Stitch",
       classifiers=['Programming Language :: Python :: 3 :: Only'],
       url="http://singer.io",
       install_requires=[
           'singer-encodings==0.1.3',
-          'singer-python==6.1.1',
+          'singer-python==6.8.0',
           'boto3==1.39.17',
           'backoff==2.2.1',
       ],
