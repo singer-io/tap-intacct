@@ -1,7 +1,6 @@
 #!/usr/bin/env python
 
-from setuptools import setup, find_packages
-import subprocess
+from setuptools import find_packages, setup
 
 setup(name="tap-intacct",
       version='1.3.0',
@@ -11,7 +10,7 @@ setup(name="tap-intacct",
       url="http://singer.io",
       install_requires=[
           'singer-encodings==0.1.3',
-          'singer-python==6.1.1',
+          'singer-python==6.8.0',
           'boto3==1.39.17',
           'backoff==2.2.1',
       ],
